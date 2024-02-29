@@ -507,20 +507,20 @@ createExplosion = (e) => {
 
 increaseDifficulty = () => {
   // Increase chance of dashes
-  if (gameTime % 1000 === 0 && specialMultiplier > 10000) {
+  if (gameTime % 500 === 0 && specialMultiplier > 10000) {
     specialMultiplier -= 2000;
   }
 
   // Increase bat spawns
   if (gameTime % 100 === 0 && batsInterval < 500) {
-    batsInterval -= 1.5;
+    batsInterval -= 0.05;
   } else if (gameTime % 100 === 0) {
-    batsInterval -= 2.5;
+    batsInterval -= 4.5;
   }
 
   // Increase speed of bats
-  if (gameTime % 500 === 0) {
-    speedMultiplier += 0.1;
+  if (gameTime % 300 === 0) {
+    speedMultiplier += 0.5;
   }
 };
 
