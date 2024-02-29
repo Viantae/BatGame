@@ -28,7 +28,7 @@ let clicks = 0;
 // Enemy multiplier
 let dashMultiplier = 2;
 let specialMultiplier = 50000;
-let speedMultiplier = 3;
+let speedMultiplier = 2;
 
 // Stop Game
 let gameOver = false;
