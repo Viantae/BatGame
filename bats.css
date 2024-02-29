@@ -2,7 +2,8 @@
   margin: auto 0;
   color: azure;
   font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
-  text-shadow: 0.4vw 0.7vh #000000;
+  text-shadow: 0.2vw 0.3vh #000000;
+  overflow: hidden
 }
 
 body{
@@ -54,10 +55,12 @@ canvas{
 
 #score{
   float: left;
+  width: 10vmax;
 }
 
 #accuracy{
   position: relative;
+  width: 24vmax;
   left: 3vw;
   float: right;
 }
