@@ -4,8 +4,6 @@ const ctx = canvas.getContext("2d");
 canvas.width = innerWidth;
 canvas.height = innerHeight;
 
-console.log(screen.height)
-console.log(innerHeight)
 let canvasposition = canvas.getBoundingClientRect();
 
 // Additional canvas for hitbox
@@ -16,22 +14,48 @@ const collisionCtx = collisionCanvas.getContext("2d", {
 collisionCanvas.width = window.innerWidth;
 collisionCanvas.height = window.innerHeight;
 
+// Enemy Spawn Rate
 let timeToNextBat = 0;
 let batsInterval = 1000; // in miliseconds
 let lastTime = 0;
 
+// Accuracy Counter
 let score = 0;
-let accuracy = 1.00;
+let accuracy = 1.0;
 let hits = 0;
 let clicks = 0;
 
+// Enemy multiplier
 let dashMultiplier = 2;
 let specialMultiplier = 50000;
 let speedMultiplier = 3;
 
+// Stop Game
 let gameOver = false;
 
+// Stores uptime of game
 let gameTime = 0;
+
+// Background layers
+const Image1 = new Image();
+Image1.src = "Background/1.png";
+const Image2 = new Image();
+Image2.src = "Background/2.png";
+const Image3 = new Image();
+Image3.src = "Background/3fx.png";
+const Image4 = new Image();
+Image4.src = "Background/4.png";
+const Image5 = new Image();
+Image5.src = "Background/5.png";
+const Image6 = new Image();
+Image6.src = "Background/6fx.png";
+const Image7 = new Image();
+Image7.src = "Background/7.png";
+const Image8 = new Image();
+Image8.src = "Background/8fx.png";
+const Image9 = new Image();
+Image9.src = "Background/9.png";
+
 const animationStatesList = [
   {
     name: "fly",
@@ -47,7 +71,7 @@ let batsArray = [];
 class Bats {
   constructor() {
     this.image = new Image();
-    this.image.src = "Sprites/Bat_Full(Flipped).png";
+    this.image.src = "Sprites/Bat_Full(Flipped-Brighten).png";
     this.maxspritesheetSize = 256;
     this.maxFramesperRow = 5;
 
@@ -350,6 +374,46 @@ class Effects {
   }
 }
 
+//Class for storing background layer parameters
+class Layer {
+  constructor(
+    image,
+    width = canvas.width,
+    height = canvas.height,
+    x = 0,
+    y = 0,
+  ) {
+    this.x = x;
+    this.y = y;
+    this.width = width;
+    this.height = height;
+    this.image = image;
+  }
+
+  // Take layer object and draw it on canvas
+  draw() {
+    ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
+  }
+}
+
+
+drawBackground = () => {
+  const first = new Layer(Image1)
+  const second = new Layer(Image2)
+  const third = new Layer(Image3)
+  const fourth = new Layer(Image4)
+  const five = new Layer(Image5)
+  const six = new Layer(Image6)
+  const seven = new Layer(Image7)
+  const eight = new Layer(Image8)
+  const nine = new Layer(Image9)
+
+const backgroundObjects = [first,second,third,fourth,five,six,seven,eight,nine]
+  backgroundObjects.forEach(obj => {
+    obj.draw();
+  });
+}
+
 // Map function to convert the range
 function mapRange(value, inMin, inMax, outMin, outMax) {
   return ((value - inMin) * (outMax - outMin)) / (inMax - inMin) + outMin;
@@ -359,31 +423,33 @@ drawScore = () => {
   document.getElementById("score").innerHTML = `Score: ${score}`;
 };
 
-accuracyCounter = () => { 
-
+accuracyCounter = () => {
   document.getElementById("accuracy").style.color;
-  
-  accuracy = parseFloat((hits/clicks) * 100).toFixed(2);
-  let R = mapRange(accuracy, 100, 0, 0, 255);
-  document.getElementById("accuracy").style.color = `rgb(${R}, ${255 - R}, 0)`
 
+  accuracy = parseFloat((hits / clicks) * 100).toFixed(2);
+  let R = mapRange(accuracy, 100, 0, 0, 255);
+  document.getElementById("accuracy").style.color = `rgb(${R}, ${255 - R}, 0)`;
 };
 
-function drawAccuracy(){
+function drawAccuracy() {
   accuracyCounter();
   document.getElementById("accuracy").innerHTML = `Accuracy: ${accuracy}%`;
-};
+}
+
 
 
 function drawgameOver() {
-  console.log("game over") 
+  console.log("game over");
   document.getElementById("gameOver").style.opacity = "1";
-  document.getElementById("gOScore").innerHTML = `You Lost (Sadly), Your Score was: <em>${score}</em> <br> Refresh to Retry`;
+  document.getElementById(
+    "gOScore"
+  ).innerHTML = `You Lost (Sadly), Your Score was: <em>${score}</em> <br> Refresh to Retry`;
 }
 
 animate = (timestamp) => {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   collisionCtx.clearRect(0, 0, canvas.width, canvas.height);
+  drawBackground();
   // For performance adjustment based on different computers
   // Timestamp different for each computer
   let deltatime = timestamp - lastTime;
@@ -414,6 +480,7 @@ animate = (timestamp) => {
 
   gameTime++;
   increaseDifficulty();
+  
 };
 
 createExplosion = (e) => {
@@ -422,7 +489,7 @@ createExplosion = (e) => {
   const getpxColor = collisionCtx.getImageData(e.x, e.y, 1, 1);
   // Get rgba value
   const pxColor = getpxColor.data;
-  clicks++
+  clicks++;
   batsArray.forEach((obj) => {
     if (
       obj.randomColor[0] === pxColor[0] &&
@@ -436,32 +503,29 @@ createExplosion = (e) => {
       explosionArray.push(new Explosions(obj.x, obj.y, obj.width));
     }
   });
-  
 };
 
 increaseDifficulty = () => {
   // Increase chance of dashes
-  if(gameTime % 1000 === 0){
+  if (gameTime % 1000 === 0 && specialMultiplier > 10000) {
     specialMultiplier -= 2000;
   }
 
   // Increase bat spawns
-  if(gameTime % 100 === 0 && batsInterval < 500){
+  if (gameTime % 100 === 0 && batsInterval < 500) {
     batsInterval -= 1.5;
-  }
-  else if(gameTime % 100 === 0){
+  } else if (gameTime % 100 === 0) {
     batsInterval -= 2.5;
   }
 
   // Increase speed of bats
-  if(gameTime % 500 === 0){
+  if (gameTime % 500 === 0) {
     speedMultiplier += 0.1;
   }
-}
-
+};
 
 window.addEventListener("click", function (e) {
-  if(!gameOver){
+  if (!gameOver) {
     createExplosion(e);
     drawScore();
     drawAccuracy();
@@ -469,10 +533,10 @@ window.addEventListener("click", function (e) {
 });
 
 window.addEventListener("resize", function () {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-  collisionCanvas.width = window.innerWidth;
-  collisionCanvas.height = window.innerHeight;
+  canvas.width = innerWidth;
+  canvas.height = innerHeight;
+  collisionCanvas.width = innerWidth;
+  collisionCanvas.height = innerHeight;
 });
-         
+
 animate(0);

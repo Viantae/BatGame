@@ -3,7 +3,7 @@
   color: azure;
   font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
   text-shadow: 0.2vw 0.3vh #000000;
-  overflow: hidden
+  overflow: hidden;
 }
 
 body{
@@ -22,6 +22,10 @@ canvas{
   left: 0;
 }
 
+.scoreBoard, .instruction-section, .gameOver{
+  z-index: 1;
+}
+
 .scoreBoard{
   font-size: 3vw;
   left: 1vw;
@@ -37,7 +41,6 @@ canvas{
   text-align: center;
   padding: 100%;
   background-color: rgba(35, 33, 33, 0.6);
-  z-index: 1;
   opacity: 0;
 }
 
