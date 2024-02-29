@@ -1,0 +1,63 @@
+*{
+  margin: auto 0;
+  color: azure;
+  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+  text-shadow: 0.4vw 0.7vh #000000;
+}
+
+body{
+  background: linear-gradient(to bottom, lightblue, rgb(51, 137, 235), green);
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+canvas, .scoreBoard, .gameOver{
+  position: absolute;
+}
+
+canvas{
+  top: 0;
+  left: 0;
+}
+
+.scoreBoard{
+  font-size: 3vw;
+  left: 1vw;
+  top: 0.5vw;
+}
+
+.gameOver{
+  font-size: 2vmax;
+  transform: translate(-50%, -50%);
+  left: 50%;
+  top: 50%;
+  width: 50%;
+  text-align: center;
+  padding: 100%;
+  background-color: rgba(35, 33, 33, 0.6);
+  z-index: 1;
+  opacity: 0;
+}
+
+.instruction-section{
+  padding: 0 0 10px 10px;
+  background-color: rgba(35, 33, 33, 0.6);
+  font-size: 1vmax;
+  width: 15%;
+  float: right;
+}
+
+#collisionCanvas{
+  opacity: 0;
+}
+
+#score{
+  float: left;
+}
+
+#accuracy{
+  position: relative;
+  left: 3vw;
+  float: right;
+}
