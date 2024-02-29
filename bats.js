@@ -1,8 +1,11 @@
 /**@type {HTMLCanvasElement} */
 const canvas = document.getElementById("canvas1");
 const ctx = canvas.getContext("2d");
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
+canvas.width = innerWidth;
+canvas.height = innerHeight;
+
+console.log(screen.height)
+console.log(innerHeight)
 let canvasposition = canvas.getBoundingClientRect();
 
 // Additional canvas for hitbox
@@ -24,7 +27,7 @@ let clicks = 0;
 
 let dashMultiplier = 2;
 let specialMultiplier = 50000;
-let speedMultiplier = 2;
+let speedMultiplier = 3;
 
 let gameOver = false;
 
