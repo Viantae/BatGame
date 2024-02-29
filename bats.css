@@ -55,12 +55,12 @@ canvas{
 
 #score{
   float: left;
-  width: 10vmax;
+  width: 20vmax;
 }
 
 #accuracy{
   position: relative;
-  width: 24vmax;
+  width: 26vmax;
   left: 3vw;
   float: right;
 }
