@@ -1,11 +1,19 @@
 /**@type {HTMLCanvasElement} */
+
+// Challenges : - Adding multiple animation states to a sprite
+//              - Resolution adjustments and set size to screen reszie
+//              - Adding Effects to the bats from a seperate sprite sheet
+//              - Creating the buttons to retry and start the game
+
+// Notes for Improvement : - Lines (126 - 155) or the animationForEach function should not be in constructor
+//                         - Sprite animation for 'zoom' and 'fly' Line 207 - 225 could be optimised for better scalability
+//                         - Research more into mobile screens and code with mobile users in mind
+
+
 const canvas = document.getElementById("canvas1");
 const ctx = canvas.getContext("2d");
 canvas.width = innerWidth;
 canvas.height = innerHeight;
-
-
-let canvasposition = canvas.getBoundingClientRect();
 
 // Additional canvas for hitbox
 const collisionCanvas = document.getElementById("collisionCanvas");
@@ -81,7 +89,7 @@ class Bats {
     // In pixels
     this.spriteWidth = 64;
     this.spriteHeight = 64;
-    this.sizeMultiplier = (canvas.width*canvas.height) * 0.0000045;
+    this.sizeMultiplier = (canvas.width*canvas.height) * 0.0000035;
     this.size = Math.random() * this.sizeMultiplier + 2;
 
     // Sprite on canvas
@@ -429,6 +437,8 @@ drawScore = () => {
 };
 
 accuracyCounter = () => {
+  console.log('clicks' + clicks);
+  console.log('hits' + hits);
   accuracy = parseFloat((hits / clicks) * 100).toFixed(2);
   let R = mapRange(accuracy, 100, 0, 0, 255);
   document.getElementById("accuracy").style.color = `rgb(${R}, ${255 - R}, 0)`;
@@ -549,18 +559,19 @@ gameStart = () =>{
 }
 
 gameReset = () => {
+  console.log(accuracy)
   document.getElementById("gameOver").style.zIndex = "-1";
   batsArray = [];
   explosionArray = [];
   particlesArray = [];
   effectsArray = [];
   score = 0;
-  hit = 1;
+  hits = 1;
   accuracy = 1.0;
   clicks = 0
   gameTime = 0;
   gameOver = false;
-  gamePause = false;
+  gamePause = false
   animate(0);
 }
 
@@ -571,6 +582,5 @@ window.addEventListener("resize", function () {
   collisionCanvas.height = innerHeight;
   drawBackground();
 });
-
-
 animate(0);
+
