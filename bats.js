@@ -77,8 +77,6 @@ const animationStatesList = [
   },
 ];
 
-
-console.log((canvas.width*canvas.height) * 0.0000035);
 let batsArray = [];
 class Bats {
   constructor() {
@@ -193,7 +191,7 @@ class Bats {
     if (this.y < 0 || this.y > canvas.height - this.height) {
       this.speedY = this.speedY * -1;
     }
-    if (this.y > canvas.height) {
+    if (this.x > canvas.width || this.y > canvas.height) {
       this.delete = true;
     }
 
@@ -437,8 +435,6 @@ drawScore = () => {
 };
 
 accuracyCounter = () => {
-  console.log('clicks' + clicks);
-  console.log('hits' + hits);
   accuracy = parseFloat((hits / clicks) * 100).toFixed(2);
   let R = mapRange(accuracy, 100, 0, 0, 255);
   document.getElementById("accuracy").style.color = `rgb(${R}, ${255 - R}, 0)`;
@@ -469,12 +465,14 @@ animate = (timestamp) => {
     let deltatime = timestamp - lastTime;
     lastTime = timestamp;
     timeToNextBat += deltatime;
-    if (timeToNextBat > batsInterval) {
-      batsArray.push(new Bats());
-      timeToNextBat = 0;
-      batsArray.sort(function (a, b) {
-        return a.width - b.width;
-      });
+    if (batsArray.length < 20){
+      if (timeToNextBat > batsInterval) {
+        batsArray.push(new Bats());
+        timeToNextBat = 0;
+        batsArray.sort(function (a, b) {
+          return a.width - b.width;
+        });
+      }
     }
     // [] Array Literal
     // ... Spread operator
@@ -559,7 +557,6 @@ gameStart = () =>{
 }
 
 gameReset = () => {
-  console.log(accuracy)
   document.getElementById("gameOver").style.zIndex = "-1";
   batsArray = [];
   explosionArray = [];
