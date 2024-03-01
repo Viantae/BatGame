@@ -9,21 +9,35 @@
     
   <body>
     
-    <section class="scoreBoard">
+    <article class="scoreBoard" id = "scoreBoard">
       <div id="score">Score:</div> 
       <div id="accuracy">Accuracy:</div> 
-      <div> </div>
-    </section>
+    </article>
 
+    <article class = "instruction-section" id = "instruction-section">
+      
+      <section id = "info">
+        <span style = "color: rgb(120, 96, 145);">Bats</span> are Bad. You have a <span style = "color: brown">Bat</span> <br>
+        Beat the <span style = "color: rgb(120, 96, 145);">Bats</span> with your <span style = "color: brown">Bat</span> <br>
+        Tap/Click the <span style = "color: rgb(120, 96, 145);">Bats</span> before they reach the other side
+      
+      <div>
+        <button type = "button" id = "start" onclick= "gameStart()" >
+          Start Bat Beating
+        </button>
+      </div>
+    </section>
+    </article>
     <section class = "gameOver" id = "gameOver">
       <div id = "gOScore">You Lost (Sadly), Your Score was: -</div>
+      <button type = "button" id = "retry" onclick = "gameReset()"> Retry</button>
     </section>
 
    
     <canvas id = "collisionCanvas"></canvas>
     <canvas id = "canvas1"></canvas>
     
-
+    <script>document.body.className='js';</script>
     <script src = "bats.js"></script>
   </body>
 </html>

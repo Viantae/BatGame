@@ -4,6 +4,7 @@ const ctx = canvas.getContext("2d");
 canvas.width = innerWidth;
 canvas.height = innerHeight;
 
+
 let canvasposition = canvas.getBoundingClientRect();
 
 // Additional canvas for hitbox
@@ -22,15 +23,16 @@ let lastTime = 0;
 // Accuracy Counter
 let score = 0;
 let accuracy = 1.0;
-let hits = 0;
+let hits = 1;
 let clicks = 0;
 
 // Enemy multiplier
 let dashMultiplier = 2;
-let specialMultiplier = 50000;
+let specialMultiplier = 10000;
 let speedMultiplier = 2;
 
 // Stop Game
+let gamePause = true;
 let gameOver = false;
 
 // Stores uptime of game
@@ -67,6 +69,8 @@ const animationStatesList = [
   },
 ];
 
+
+console.log((canvas.width*canvas.height) * 0.0000035);
 let batsArray = [];
 class Bats {
   constructor() {
@@ -74,11 +78,11 @@ class Bats {
     this.image.src = "Sprites/Bat_Full(Flipped-Brighten).png";
     this.maxspritesheetSize = 256;
     this.maxFramesperRow = 5;
-
     // In pixels
     this.spriteWidth = 64;
     this.spriteHeight = 64;
-    this.size = Math.random() * 3 + 1.8;
+    this.sizeMultiplier = (canvas.width*canvas.height) * 0.0000045;
+    this.size = Math.random() * this.sizeMultiplier + 2;
 
     // Sprite on canvas
     this.width = this.spriteWidth * this.size;
@@ -408,10 +412,11 @@ drawBackground = () => {
   const eight = new Layer(Image8)
   const nine = new Layer(Image9)
 
-const backgroundObjects = [first,second,third,fourth,five,six,seven,eight,nine]
-  backgroundObjects.forEach(obj => {
-    obj.draw();
-  });
+  const backgroundObjects = [first,second,third,fourth,five,six,seven,eight,nine]
+    backgroundObjects.forEach(obj => {
+      obj.draw();
+    });
+    
 }
 
 // Map function to convert the range
@@ -424,8 +429,6 @@ drawScore = () => {
 };
 
 accuracyCounter = () => {
-  document.getElementById("accuracy").style.color;
-
   accuracy = parseFloat((hits / clicks) * 100).toFixed(2);
   let R = mapRange(accuracy, 100, 0, 0, 255);
   document.getElementById("accuracy").style.color = `rgb(${R}, ${255 - R}, 0)`;
@@ -436,51 +439,53 @@ function drawAccuracy() {
   document.getElementById("accuracy").innerHTML = `Accuracy: ${accuracy}%`;
 }
 
-
-
 function drawgameOver() {
-  console.log("game over");
   document.getElementById("gameOver").style.opacity = "1";
+  document.getElementById("gameOver").style.zIndex = "1";
   document.getElementById(
     "gOScore"
-  ).innerHTML = `You Lost (Sadly), Your Score was: <em>${score}</em> <br> Refresh to Retry`;
+  ).innerHTML = `You Lost (Sadly), Your Score was: <em>${score}</em> <br>`;
+  gamePause = true;
 }
 
 animate = (timestamp) => {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  collisionCtx.clearRect(0, 0, canvas.width, canvas.height);
   drawBackground();
-  // For performance adjustment based on different computers
-  // Timestamp different for each computer
-  let deltatime = timestamp - lastTime;
-  lastTime = timestamp;
-  timeToNextBat += deltatime;
-  if (timeToNextBat > batsInterval) {
-    batsArray.push(new Bats());
-    timeToNextBat = 0;
-    batsArray.sort(function (a, b) {
-      return a.width - b.width;
-    });
+  if(!gamePause){
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    collisionCtx.clearRect(0, 0, canvas.width, canvas.height);
+    drawBackground();
+    // For performance adjustment based on different computers
+    // Timestamp different for each computer
+    let deltatime = timestamp - lastTime;
+    lastTime = timestamp;
+    timeToNextBat += deltatime;
+    if (timeToNextBat > batsInterval) {
+      batsArray.push(new Bats());
+      timeToNextBat = 0;
+      batsArray.sort(function (a, b) {
+        return a.width - b.width;
+      });
+    }
+    // [] Array Literal
+    // ... Spread operator
+    [...batsArray, ...explosionArray, ...effectsArray, ...particlesArray].forEach(
+      (obj) => obj.update(deltatime)
+    );
+    [...batsArray, ...explosionArray, ...effectsArray, ...particlesArray].forEach(
+      (obj) => obj.draw()
+    );
+    // Replace array with objects with delete = false
+    batsArray = batsArray.filter((obj) => !obj.delete);
+    explosionArray = explosionArray.filter((obj) => !obj.delete);
+    particlesArray = particlesArray.filter((obj) => !obj.delete);
+    effectsArray = effectsArray.filter((obj) => !obj.delete);
+    
+
+    gameTime++;
+    increaseDifficulty();
   }
-  // [] Array Literal
-  // ... Spread operator
-  [...batsArray, ...explosionArray, ...effectsArray, ...particlesArray].forEach(
-    (obj) => obj.update(deltatime)
-  );
-  [...batsArray, ...explosionArray, ...effectsArray, ...particlesArray].forEach(
-    (obj) => obj.draw()
-  );
-  // Replace array with objects with delete = false
-  batsArray = batsArray.filter((obj) => !obj.delete);
-  explosionArray = explosionArray.filter((obj) => !obj.delete);
-  particlesArray = particlesArray.filter((obj) => !obj.delete);
-  effectsArray = effectsArray.filter((obj) => !obj.delete);
   if (!gameOver) requestAnimationFrame(animate);
   else drawgameOver();
-
-  gameTime++;
-  increaseDifficulty();
-  
 };
 
 createExplosion = (e) => {
@@ -507,8 +512,11 @@ createExplosion = (e) => {
 
 increaseDifficulty = () => {
   // Increase chance of dashes
-  if (gameTime % 500 === 0 && specialMultiplier > 10000) {
-    specialMultiplier -= 2000;
+  if (gameTime % 500 === 0 && specialMultiplier > 3000) {
+    specialMultiplier -= 50;
+  }
+  else if(score % 50 === 0 && specialMultiplier > 5000){
+    specialMultiplier -= 1000;
   }
 
   // Increase bat spawns
@@ -519,24 +527,50 @@ increaseDifficulty = () => {
   }
 
   // Increase speed of bats
-  if (gameTime % 300 === 0) {
-    speedMultiplier += 0.5;
+  if (gameTime % 500 === 0 && speedMultiplier < 9) {
+    speedMultiplier += 0.4;
   }
 };
 
-window.addEventListener("click", function (e) {
-  if (!gameOver) {
-    createExplosion(e);
-    drawScore();
-    drawAccuracy();
-  }
-});
+gameStart = () =>{
+  document.getElementById("instruction-section").style.opacity = "0";
+  document.getElementById("instruction-section").style.zIndex = "-1";
+  document.getElementById("gameOver").style.zIndex = "-1";
+  gamePause = false;
+  window.addEventListener("click", function (e) {
+    if(!gamePause){
+      if (!gameOver) {
+        createExplosion(e);
+        drawScore();
+        drawAccuracy();
+      }
+    }
+  });
+}
+
+gameReset = () => {
+  document.getElementById("gameOver").style.zIndex = "-1";
+  batsArray = [];
+  explosionArray = [];
+  particlesArray = [];
+  effectsArray = [];
+  score = 0;
+  hit = 1;
+  accuracy = 1.0;
+  clicks = 0
+  gameTime = 0;
+  gameOver = false;
+  gamePause = false;
+  animate(0);
+}
 
 window.addEventListener("resize", function () {
   canvas.width = innerWidth;
   canvas.height = innerHeight;
   collisionCanvas.width = innerWidth;
   collisionCanvas.height = innerHeight;
+  drawBackground();
 });
+
 
 animate(0);

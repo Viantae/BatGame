@@ -10,7 +10,6 @@ body{
   background: linear-gradient(to bottom, lightblue, rgb(51, 137, 235), green);
   width: 100vw;
   height: 100vh;
-  overflow: hidden;
 }
 
 canvas, .scoreBoard, .gameOver{
@@ -20,9 +19,10 @@ canvas, .scoreBoard, .gameOver{
 canvas{
   top: 0;
   left: 0;
+  z-index: -1;
 }
 
-.scoreBoard, .instruction-section, .gameOver{
+.scoreBoard, .instruction-section{
   z-index: 1;
 }
 
@@ -34,22 +34,29 @@ canvas{
 
 .gameOver{
   font-size: 2vmax;
+  text-align: center;
+  padding: 100%;
   transform: translate(-50%, -50%);
   left: 50%;
   top: 50%;
-  width: 50%;
-  text-align: center;
-  padding: 100%;
+  width: 30%;
   background-color: rgba(35, 33, 33, 0.6);
   opacity: 0;
+  z-index: 0;
 }
 
 .instruction-section{
-  padding: 0 0 10px 10px;
+  position: absolute;
+  transform: translate(-50%, -50%);
+  left: 50%;
+  top: 50%;
+  
+  border-radius: 3vmax;
+  padding: 2%;
   background-color: rgba(35, 33, 33, 0.6);
-  font-size: 1vmax;
-  width: 15%;
-  float: right;
+  font-size: 2vmax;
+  text-align: center;
+  width: 30%;
 }
 
 #collisionCanvas{
@@ -67,3 +74,70 @@ canvas{
   left: 3vw;
   float: right;
 }
+
+#start {
+  color: rgb(70, 39, 102);
+  background-color: rgb(195, 194, 194);
+  border-radius: 0.5vmax;
+  font-size: 2vmax;
+  margin-top: 0.5vmax;
+  padding: 2% ;
+  background-color: rgb(195, 194, 194);
+  border: 1px transparent solid black; /* transparent border */
+  color:  rgb(70, 39, 102);
+  text-align: center;
+  display: inline-block;
+  text-shadow: 0.2vw 0.3vh brown;
+  cursor: pointer;
+}
+
+#start:hover
+{
+  transition-duration: 0.4s;
+  opacity: 1;
+  background-color:rgb(70, 39, 102);
+  color: aliceblue;
+  border: 1px aliceblue solid;  
+}
+
+#start:active
+{
+  background-color: rgb(42, 19, 65);
+  color: gray;
+  border: 1px #000000 solid;
+}
+
+#retry {
+  color: rgb(70, 39, 102);
+  background-color: rgb(195, 194, 194);
+  border-radius: 0.5vmax;
+  font-size: 3vmax;
+  margin-top: 0.5vmax;
+  padding: 2% ;
+  background-color: rgb(195, 194, 194);
+  border: 1px transparent solid black; /* transparent border */
+  color:  rgb(70, 39, 102);
+  text-align: center;
+  display: inline-block;
+  text-shadow: 0.2vw 0.3vh brown;
+  cursor: pointer;
+}
+
+#retry:hover
+{
+  transition-duration: 0.4s;
+  opacity: 1;
+  background-color:rgb(70, 39, 102);
+  color: aliceblue;
+  border: 1px aliceblue solid;  
+}
+
+#retry:active
+{
+  background-color: rgb(42, 19, 65);
+  color: gray;
+  border: 1px #000000 solid;
+}
+
+/* To stop screen flicker every update */
+.js .accordion:nth-child(n+1) { display: none }
