@@ -37,7 +37,7 @@ let clicks = 0;
 // Enemy multiplier
 let dashMultiplier = 2;
 let specialMultiplier = 10000;
-let speedMultiplier = 2;
+let speedMultiplier = 2.4;
 
 // Stop Game
 let gamePause = true;
@@ -536,7 +536,7 @@ increaseDifficulty = () => {
 
   // Increase speed of bats
   if (gameTime % 500 === 0 && speedMultiplier < 9) {
-    speedMultiplier += 0.4;
+    speedMultiplier += 0.5;
   }
 };
 
