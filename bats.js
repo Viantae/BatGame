@@ -455,6 +455,7 @@ function drawgameOver() {
 }
 
 animate = (timestamp) => {
+  console.log(gameTime);
   drawBackground();
   if(!gamePause){
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -562,13 +563,16 @@ gameReset = () => {
   explosionArray = [];
   particlesArray = [];
   effectsArray = [];
+  dashMultiplier = 2;
+  specialMultiplier = 10000;
+  speedMultiplier = 2.4;
   score = 0;
   hits = 1;
   accuracy = 1.0;
   clicks = 0
   gameTime = 0;
   gameOver = false;
-  gamePause = false
+  gamePause = false;
   animate(0);
 }
 
