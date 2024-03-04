@@ -566,6 +566,7 @@ gameReset = () => {
   dashMultiplier = 2;
   specialMultiplier = 10000;
   speedMultiplier = 2.4;
+  batsInterval = 1000;
   score = 0;
   hits = 1;
   accuracy = 1.0;

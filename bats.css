@@ -75,6 +75,10 @@ canvas{
   float: right;
 }
 
+.ver{
+  float: right;
+}
+
 #start {
   color: rgb(70, 39, 102);
   background-color: rgb(195, 194, 194);
