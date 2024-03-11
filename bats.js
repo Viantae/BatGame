@@ -455,7 +455,6 @@ function drawgameOver() {
 }
 
 animate = (timestamp) => {
-  console.log(gameTime);
   drawBackground();
   if(!gamePause){
     ctx.clearRect(0, 0, canvas.width, canvas.height);
